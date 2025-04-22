@@ -21,6 +21,36 @@ services:
     networks:
       - app-network
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  initdb:
+    image: python:3.9-slim
+    container_name: initdb
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "apt-get update &&
+             apt-get install -y libpq-dev python3-dev &&
+             pip install psycopg2-binary faker &&
+             python initdb.py"
+    networks:
+      - app-network
+
   app:
     build: .
     container_name: app
