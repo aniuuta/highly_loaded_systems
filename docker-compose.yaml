@@ -1,81 +1,21 @@
-version: '3.8'
+version: '7.0'
 
 services:
-  postgres:
-    image: postgres:13
-    container_name: postgres
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: progress_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d progress_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    networks:
-      - app-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
-    networks:
-      - app-network
-
-  initdb:
-    image: python:3.9-slim
-    container_name: initdb
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: >
-      sh -c "apt-get update &&
-             apt-get install -y libpq-dev python3-dev &&
-             pip install psycopg2-binary faker &&
-             python initdb.py"
-    networks:
-      - app-network
 
   app:
-    build: .
+    image: aniuuta/module1
+    #build: .
     container_name: app
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/progress_db?currentSchema=public
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin
-      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://hl21.zil:5432/kor
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/kor
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
       SERVER_TOMCAT_MAX_THREADS: "200"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - app-network
     deploy:
       resources:
         limits:
           cpus: '2.0'
           memory: 2048M
-
-networks:
-  app-network:
-    driver: bridge
-
-volumes:
-  postgres_data:

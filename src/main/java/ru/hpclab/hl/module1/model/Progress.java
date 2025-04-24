@@ -13,13 +13,17 @@ import java.util.UUID;
 @Table(name = "progress")
 public class Progress {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "lesson_id", nullable = false)
-    private UUID lesson;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_id", nullable = false)
+    private Lesson lesson;
 
     @Column(name = "ending", nullable = false)
     private LocalDateTime ending;
@@ -27,12 +31,11 @@ public class Progress {
     @Column(name = "test_result", nullable = false)
     private int testResult;
 
-    public Progress(UUID user, UUID lesson, LocalDateTime ending)
-    {
+    public Progress(User user, Lesson lesson, LocalDateTime ending) {
         this.id = UUID.randomUUID();
-        this.ending = ending;
-        this.lesson = lesson;
-        this.testResult = 0;
         this.user = user;
+        this.lesson = lesson;
+        this.ending = ending;
+        this.testResult = 0;
     }
 }

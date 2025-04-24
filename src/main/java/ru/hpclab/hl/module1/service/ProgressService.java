@@ -3,7 +3,6 @@ package ru.hpclab.hl.module1.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hpclab.hl.module1.model.Progress;
-import ru.hpclab.hl.module1.repository.InMemoryProgressRepository;
 import ru.hpclab.hl.module1.repository.ProgressRepository;
 
 import java.time.LocalDateTime;

@@ -9,9 +9,9 @@ import java.util.UUID;
 @Data
 public class ProgressTDO
 {
-    private UUID user;
+    private User user;
 
-    private UUID lesson;
+    private Lesson lesson;
 
     private LocalDateTime ending;
 

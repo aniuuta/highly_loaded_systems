@@ -3,12 +3,10 @@ package ru.hpclab.hl.module1.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hpclab.hl.module1.model.User;
-import ru.hpclab.hl.module1.repository.InMemoryUserRepository;
 import ru.hpclab.hl.module1.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

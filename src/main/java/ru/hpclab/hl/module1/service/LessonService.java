@@ -3,7 +3,6 @@ package ru.hpclab.hl.module1.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hpclab.hl.module1.model.Lesson;
-import ru.hpclab.hl.module1.repository.InMemoryLessonRepository;
 import ru.hpclab.hl.module1.repository.LessonRepository;
 
 import java.util.List;
