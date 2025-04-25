@@ -24,7 +24,7 @@ public class LessonService {
         return lessonRepository.findAll();
     }
 
-    public Lesson getLessonById(UUID id) {
+    public Lesson getLessonById(long id) {
         return lessonRepository.findById(id).orElse(null);
     }
 
@@ -32,11 +32,11 @@ public class LessonService {
         return lessonRepository.save(lesson);
     }
 
-    public void deleteLesson(UUID id) {
+    public void deleteLesson(long id) {
         lessonRepository.deleteById(id);
     }
 
-    public Lesson updateLesson(UUID id, Lesson lesson) {
+    public Lesson updateLesson(long id, Lesson lesson) {
         lesson.setId(id);
         return lessonRepository.save(lesson);
     }

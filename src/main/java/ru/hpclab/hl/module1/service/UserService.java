@@ -27,7 +27,7 @@ public class UserService {
     }
 
     // Получить пользователя по ID
-    public User getUserById(UUID id) {
+    public User getUserById(long id) {
         return userRepository.findById(id).orElse(null);
     }
 
@@ -37,13 +37,13 @@ public class UserService {
     }
 
     // Удалить пользователя по ID
-    public void deleteUser(UUID id) {
+    public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
 
     // Обновить пользователя по ID
-    public User updateUser(UUID id, User user) {
-        user.setIdentifier(id);
+    public User updateUser(long id, User user) {
+        user.setId(id);
         return userRepository.save(user);
     }
 

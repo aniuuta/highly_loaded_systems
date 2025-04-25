@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "progress")
 public class Progress {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -31,11 +31,11 @@ public class Progress {
     @Column(name = "test_result", nullable = false)
     private int testResult;
 
-    public Progress(User user, Lesson lesson, LocalDateTime ending) {
-        this.id = UUID.randomUUID();
+    public Progress(User user, Lesson lesson, LocalDateTime ending, int testResult) {
         this.user = user;
         this.lesson = lesson;
         this.ending = ending;
-        this.testResult = 0;
+        this.testResult = testResult;
     }
+
 }

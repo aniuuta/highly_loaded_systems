@@ -5,16 +5,14 @@ import lombok.*;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Data
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @NonNull
-    private UUID identifier;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "fio", nullable = false)
     @NonNull
@@ -33,7 +31,6 @@ public class User {
     private LocalDateTime dateRegistry;
 
     public User(@NonNull String fio, @NonNull String login, @NonNull String email) {
-        this.identifier = UUID.randomUUID();
         this.fio = fio;
         this.login = login;
         this.email = email;
@@ -41,5 +38,6 @@ public class User {
     }
 
     public User() {
+        // Нужен пустой конструктор для JPA
     }
 }

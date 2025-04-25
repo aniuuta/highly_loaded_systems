@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     // Пользовательский запрос для поиска пользователя по логину
     @Query("SELECT u FROM User u WHERE u.login = :login")

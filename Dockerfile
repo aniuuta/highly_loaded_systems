@@ -1,25 +1,20 @@
-FROM gradle:latest
-
-# Устанавливаем рабочую директорию
-WORKDIR /app
-
-# Копируем файл сборки и исходный код
-COPY build.gradle .
-COPY gradlew .
-COPY gradle gradle
-COPY src src
-
-# Собираем проект
-RUN gradle build -x test --no-daemon
-
-# Собираем проект
-RUN gradle build -x test --no-daemon --warning-mode all
-
-# Второй этап - только для запуска
 FROM openjdk:21-jdk-slim
+
+# Создаём пользователя без привилегий
+RUN useradd -m -s /usr/sbin/nologin appuser
+
 WORKDIR /app
-COPY --from=0 /app/build/libs/*.jar app.jar
+
+# Копируем файлы с правами нового пользователя
+COPY --chown=appuser:appuser build /app/build
+COPY --chown=appuser:appuser build/libs/*.jar app.jar
+
+# Делаем файлы доступными только для чтения
+RUN chmod -R 744 /app
+RUN chown -R appuser /app
+# Переключаемся на пользователя с ограниченными правами
+USER appuser
 
 EXPOSE 8080
-# Запускаем приложение
+
 ENTRYPOINT ["java", "-jar", "app.jar"]

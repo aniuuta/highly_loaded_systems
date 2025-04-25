@@ -27,12 +27,12 @@ public class LessonController {
     }
 
     @GetMapping("/{id}")
-    public Lesson getLessonById(@PathVariable UUID id) {
+    public Lesson getLessonById(@PathVariable long id) {
         return lessonService.getLessonById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLesson(@PathVariable UUID id) {
+    public void deleteLesson(@PathVariable long id) {
         lessonService.deleteLesson(id);
     }
 
@@ -47,7 +47,7 @@ public class LessonController {
     }
 
     @PutMapping("/{id}")
-    public Lesson updateLesson(@PathVariable UUID id, @RequestBody Lesson lesson) {
+    public Lesson updateLesson(@PathVariable long id, @RequestBody Lesson lesson) {
         return lessonService.updateLesson(id, lesson);
     }
     @DeleteMapping("/clear")

@@ -7,12 +7,10 @@ import ru.hpclab.hl.module1.model.Progress;
 import ru.hpclab.hl.module1.model.ProgressTDO;
 import ru.hpclab.hl.module1.service.ProgressService;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/progresses")
+@RequestMapping("/progress")
 public class ProgressController {
 
     private final ProgressService progressService;
@@ -22,66 +20,48 @@ public class ProgressController {
         this.progressService = progressService;
     }
 
-    // Получить все записи прогресса
+    // Получить весь прогресс в формате TDO
     @GetMapping
-    public List<Progress> getAllProgresses() {
-        return progressService.getAllProgresses();
+    public ResponseEntity<List<ProgressTDO>> getAllProgress() {
+        return ResponseEntity.ok(progressService.getAllProgress());
     }
 
-    // Получить прогресс по ID
+    // Получить прогресс по ID в формате TDO
     @GetMapping("/{id}")
-    public Progress getProgressById(@PathVariable UUID id) {
-        return progressService.getProgressById(id);
-    }
-
-    // Удалить прогресс по ID
-    @DeleteMapping("/{id}")
-    public void deleteProgress(@PathVariable UUID id) {
-        progressService.deleteProgress(id);
+    public ResponseEntity<ProgressTDO> getProgressById(@PathVariable Long id) {
+        try {
+            ProgressTDO progress = progressService.getProgressById(id);
+            return ResponseEntity.ok(progress);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Сохранить новый прогресс
     @PostMapping
-    public ResponseEntity<Progress> saveProgress(@RequestBody ProgressTDO progress)
-    {
-        return ResponseEntity.ok(progressService.saveProgress(new Progress(
-                progress.getUser(),
-                progress.getLesson(),
-                progress.getEnding()
-        )));
+    public ResponseEntity<Progress> saveProgress(@RequestBody ProgressTDO progressTDO) {
+        // Сохраняем прогресс
+        Progress savedProgress = progressService.saveProgress(progressTDO);
+
+        // Возвращаем сохраненный объект с HTTP статусом 200 OK
+        return ResponseEntity.ok(savedProgress);
     }
 
     // Обновить прогресс по ID
     @PutMapping("/{id}")
-    public Progress updateProgress(@PathVariable UUID id, @RequestBody Progress progress) {
-        return progressService.updateProgress(id, progress);
+    public ResponseEntity<Progress> updateProgress(@PathVariable Long id, @RequestBody ProgressTDO progressTDO) {
+        Progress updatedProgress = progressService.convertToEntity(progressTDO);
+        return ResponseEntity.ok(progressService.updateProgress(id, updatedProgress));
     }
 
-    // Пользовательские методы
-
-    // Получить прогресс по ID пользователя
-    @GetMapping("/user/{userId}")
-    public List<Progress> getProgressesByUserId(@PathVariable UUID userId) {
-        return progressService.getProgressesByUserId(userId);
+    // Удалить прогресс по ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProgress(@PathVariable Long id) {
+        progressService.deleteProgress(id);
+        return ResponseEntity.ok().build();
     }
 
-    // Получить прогресс по ID урока
-    @GetMapping("/lesson/{lessonId}")
-    public List<Progress> getProgressesByLessonId(@PathVariable UUID lessonId) {
-        return progressService.getProgressesByLessonId(lessonId);
-    }
-
-    // Получить прогресс с результатом теста выше определенного значения
-    @GetMapping("/test-result/{minResult}")
-    public List<Progress> getProgressesWithTestResultGreaterThan(@PathVariable int minResult) {
-        return progressService.getProgressesWithTestResultGreaterThan(minResult);
-    }
-
-    // Получить прогресс по дате завершения (после определенной даты)
-    @GetMapping("/after-ending")
-    public List<Progress> getProgressesAfterEndingDate(@RequestParam LocalDateTime date) {
-        return progressService.getProgressesAfterEndingDate(date);
-    }
+    // Удалить весь прогресс
     @DeleteMapping("/clear")
     public ResponseEntity<Void> clearAllProgress() {
         progressService.clearAll();

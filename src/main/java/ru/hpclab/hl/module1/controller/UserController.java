@@ -31,13 +31,13 @@ public class UserController {
 
     // Получить пользователя по ID
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable UUID id) {
+    public User getUserById(@PathVariable long id) {
         return userService.getUserById(id);
     }
 
     // Удалить пользователя по ID
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable UUID id) {
+    public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
     }
 
@@ -57,7 +57,7 @@ public class UserController {
 
     // Обновить пользователя по ID
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable UUID id, @RequestBody User user) {
+    public User updateUser(@PathVariable long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
